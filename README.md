@@ -1,35 +1,51 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# CardCard
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+**Форма для ввода данных банковской карты**
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Kotlin Multiplatform приложение на базе Compose Multiplatform с поддержкой Android и iOS.
 
-### Build and Run Android Application
+## Описание задания
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+Задача — разработать удобную и современную форму для ввода данных банковской карты (номер карты, срок действия, CVV/CVC, имя держателя и т.д.).
 
-### Build and Run iOS Application
+Приложение реализовано с помощью **Kotlin Multiplatform + Compose Multiplatform**, что позволяет использовать один и тот же код UI и логики на Android и iOS.
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+Основные возможности:
+- Валидация номера карты в реальном времени (определение платёжной системы)
+- Автоматическое форматирование номера карты (пробелы каждые 4 цифры)
+- Ввод срока действия (MM/YY)
+- Поле CVV/CVC с маскировкой
+- Поле имени держателя карты
+- Красивый и responsive дизайн
 
----
+## Скриншоты экранов
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+![Главный экран формы](screenshots/screen.jpg)
+
+
+## Видео демонстрации
+
+https://disk.360.yandex.ru/i/bmbrnGdJgV-IJw
+
+## Скачать APK
+
+Прямая ссылка на debug-APK (размещён в репозитории):  
+[composeApp.apk](composeApp.apk)
+
+## Инструкция по запуску
+
+### Требования
+- Android Studio (рекомендуется последняя версия с поддержкой KMP)
+- Для iOS: macOS + Xcode
+- JDK 36 или выше
+
+### Запуск Android приложения
+
+## Открой проект в Android Studio и запусти конфигурацию composeApp
+
+### ИИ инструменты:
+
+- DeepSeek
+- Grok
+- Cursor
+- Qwen
