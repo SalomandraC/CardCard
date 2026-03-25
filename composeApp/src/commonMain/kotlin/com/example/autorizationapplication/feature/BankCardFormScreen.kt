@@ -75,7 +75,6 @@ fun BankCardFormScreen(
         }
     }
 
-    // ✅ БЕЗ remember — значения вычисляются "на лету" при каждой рекомпозиции
     val maskedCardNumber = viewModel.getMaskedCardNumber()
     val maskedCardHolderName = viewModel.getMaskedCardHolderName()
 
@@ -86,6 +85,8 @@ fun BankCardFormScreen(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(36.dp))
+
         CardVisual(
             cardNumber = maskedCardNumber,
             cardHolderName = maskedCardHolderName,
@@ -165,29 +166,46 @@ fun BankCardFormScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            CardInputField(
-                value = expiryFieldValue.text,
-                onValueChange = { newText ->
-                    val digitsBefore = expiryFieldValue.text
-                        .take(expiryFieldValue.selection.start)
-                        .count(Char::isDigit)
+            Column(modifier = Modifier.weight(1f)) {
+                OutlinedTextField(
+                    value = expiryFieldValue,
+                    onValueChange = { newValue ->
+                        val digitsBeforeCursor = newValue.text
+                            .take(newValue.selection.start)
+                            .count(Char::isDigit)
 
-                    val formatted = formatExpiry(newText)
-                    viewModel.updateExpiryDate(formatted)
+                        val formatted = formatExpiry(newValue.text)
+                        viewModel.updateExpiryDate(formatted)
 
-                    val newCursor = cursorPositionByDigits(formatted, digitsBefore)
-                    expiryFieldValue = TextFieldValue(
-                        text = formatted,
-                        selection = TextRange(newCursor.coerceAtMost(formatted.length))
+                        val newCursor = cursorPositionByDigits(formatted, digitsBeforeCursor)
+                        expiryFieldValue = TextFieldValue(
+                            text = formatted,
+                            selection = TextRange(newCursor.coerceAtMost(formatted.length))
+                        )
+                    },
+                    label = { Text("Expiry Date") },
+                    placeholder = { Text("MM/YY") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    isError = state.showExpiryDateError && state.expiryDateValidation is CardValidationResult.Invalid,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        errorBorderColor = MaterialTheme.colorScheme.error
                     )
-                },
-                label = "Expiry Date",
-                placeholder = "MM/YY",
-                keyboardType = KeyboardType.Number,
-                isError = state.showExpiryDateError && state.expiryDateValidation is CardValidationResult.Invalid,
-                errorMessage = if (state.showExpiryDateError) getErrorMessage(state.expiryDateValidation) else null,
-                modifier = Modifier.weight(1f)
-            )
+                )
+
+                if (state.showExpiryDateError) {
+                    val errorMessage = getErrorMessage(state.expiryDateValidation)
+                    if (!errorMessage.isNullOrEmpty()) {
+                        Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                        )
+                    }
+                }
+            }
 
             CardInputField(
                 value = state.cvv,
